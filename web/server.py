@@ -123,6 +123,11 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
             })
             return
 
+        if self.path == "/api/scheduler/status":
+            from core.scheduler import scheduler_engine
+            self._send_json({"success": True, "scheduler": scheduler_engine.get_status()})
+            return
+
         if self.path == "/api/learn/status" or self.path.startswith("/api/learn"):
             mem = BaayMemory()
             learn_data = mem.get_learning_status()
@@ -292,10 +297,26 @@ for attr in dir(user_submission):
                 self._send_json({"success": False, "error": f"Erreur d'analyse de code : {str(e)}"}, status_code=500)
             return
 
+        if self.path == "/api/scheduler/run_now":
+            try:
+                content_len = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_len).decode('utf-8')
+                data = json.loads(body)
+                task_name = data.get("task_name", "")
+
+                from core.scheduler import scheduler_engine
+                ok = scheduler_engine.run_now(task_name)
+                self._send_json({"success": ok, "task_name": task_name, "scheduler": scheduler_engine.get_status()})
+            except Exception as e:
+                self._send_json({"success": False, "error": f"Erreur d'exécution planifiée : {str(e)}"}, status_code=500)
+            return
+
         self._send_json({"success": False, "error": "Endpoint introuvable."}, status_code=404)
 
 
 def run_server(port: int = PORT):
+    from core.scheduler import scheduler_engine
+    scheduler_engine.start()
     server_address = ("", port)
     httpd = HTTPServer(server_address, BaayWebHandler)
     print("=" * 65)
@@ -306,6 +327,7 @@ def run_server(port: int = PORT):
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\n[SERVEUR WEB] Arrêt du serveur Web.")
+        scheduler_engine.stop()
         httpd.server_close()
 
 

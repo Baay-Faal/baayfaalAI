@@ -356,6 +356,27 @@ def review_code(code: str, language: str = "python") -> Dict[str, Any]:
     return review_code_snippet(code, language)
 
 
+def list_scheduled_tasks() -> Dict[str, Any]:
+    """
+    Consulte l'état du planificateur de tâches en arrière-plan et la liste des tâches planifiées.
+    """
+    from core.scheduler import scheduler_engine
+    return scheduler_engine.get_status()
+
+
+def trigger_scheduler_task(task_name: str) -> Dict[str, Any]:
+    """
+    Déclenche l'exécution immédiate d'une tâche planifiée (ex: 'backup_database', 'check_nodes_health').
+    """
+    from core.scheduler import scheduler_engine
+    success = scheduler_engine.run_now(task_name)
+    return {
+        "success": success,
+        "task_name": task_name,
+        "status": scheduler_engine.get_status()
+    }
+
+
 # Registre des outils disponibles pour l'Agent
 TOOL_REGISTRY: Dict[str, Callable[..., Any]] = {
     "execute_command": execute_command,
@@ -371,7 +392,9 @@ TOOL_REGISTRY: Dict[str, Callable[..., Any]] = {
     "yite_cleaner": yite_cleaner,
     "ndigel_scaffolder": ndigel_scaffolder,
     "njabot_deployer": njabot_deployer,
-    "review_code": review_code
+    "review_code": review_code,
+    "list_scheduled_tasks": list_scheduled_tasks,
+    "trigger_scheduler_task": trigger_scheduler_task
 }
 
 # Documentation structurée des outils injectée au LLM
@@ -445,6 +468,16 @@ TOOL_SCHEMAS = [
         "name": "review_code",
         "description": "🔍 CODE REVIEWER : Analyseur statique (Big-O, PEP 8, Sécurité, Note /10).",
         "parameters": {"code": "string", "language": "string (optionnel, 'python' par défaut)"}
+    },
+    {
+        "name": "list_scheduled_tasks",
+        "description": "⏱️ CRON SCHEDULER : Liste l'état et les tâches d'arrière-plan planifiées (sauvegardes, santé réseau).",
+        "parameters": {}
+    },
+    {
+        "name": "trigger_scheduler_task",
+        "description": "🚀 RUN SCHEDULER TASK : Déclenche l'exécution immédiate d'une tâche d'arrière-plan (ex: 'backup_database', 'check_nodes_health').",
+        "parameters": {"task_name": "string"}
     }
 ]
 
