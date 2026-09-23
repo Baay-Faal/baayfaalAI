@@ -234,6 +234,22 @@ for attr in dir(user_submission):
                 self._send_json({"success": False, "error": f"Erreur de vérification de code : {str(e)}"}, status_code=500)
             return
 
+        if parsed_path.path == "/api/learn/review":
+            try:
+                content_len = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_len).decode('utf-8')
+                data = json.loads(body)
+                code_snippet = data.get("code", "")
+                language = data.get("language", "python")
+
+                from core.code_reviewer import review_code_snippet
+                review_results = review_code_snippet(code_snippet, language)
+
+                self._send_json({"success": True, "review": review_results})
+            except Exception as e:
+                self._send_json({"success": False, "error": f"Erreur d'analyse de code : {str(e)}"}, status_code=500)
+            return
+
         self._send_json({"success": False, "error": "Endpoint introuvable."}, status_code=404)
 
 

@@ -348,6 +348,14 @@ def njabot_deployer(node: str = "localhost", action: str = "status") -> Dict[str
     }
 
 
+def review_code(code: str, language: str = "python") -> Dict[str, Any]:
+    """
+    Effectue une analyse statique et une revue de code automatisée (Big-O, PEP 8, Sécurité).
+    """
+    from core.code_reviewer import review_code_snippet
+    return review_code_snippet(code, language)
+
+
 # Registre des outils disponibles pour l'Agent
 TOOL_REGISTRY: Dict[str, Callable[..., Any]] = {
     "execute_command": execute_command,
@@ -362,7 +370,8 @@ TOOL_REGISTRY: Dict[str, Callable[..., Any]] = {
     "tak_jouk_generator": tak_jouk_generator,
     "yite_cleaner": yite_cleaner,
     "ndigel_scaffolder": ndigel_scaffolder,
-    "njabot_deployer": njabot_deployer
+    "njabot_deployer": njabot_deployer,
+    "review_code": review_code
 }
 
 # Documentation structurée des outils injectée au LLM
@@ -431,6 +440,11 @@ TOOL_SCHEMAS = [
         "name": "njabot_deployer",
         "description": "🌐 NJABOT DEPLOYER : Assistant Git & Déploiement Réseau Distant.",
         "parameters": {"node": "string", "action": "string"}
+    },
+    {
+        "name": "review_code",
+        "description": "🔍 CODE REVIEWER : Analyseur statique (Big-O, PEP 8, Sécurité, Note /10).",
+        "parameters": {"code": "string", "language": "string (optionnel, 'python' par défaut)"}
     }
 ]
 
