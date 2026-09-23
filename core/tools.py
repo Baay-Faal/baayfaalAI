@@ -377,6 +377,33 @@ def trigger_scheduler_task(task_name: str) -> Dict[str, Any]:
     }
 
 
+def list_loaded_plugins() -> Dict[str, Any]:
+    """
+    Consulte la liste des plugins dynamiques chargés depuis le dossier 'plugins/'.
+    """
+    from core.plugin_loader import plugin_loader_engine
+    return plugin_loader_engine.get_status()
+
+
+def reload_plugins() -> Dict[str, Any]:
+    """
+    Recharge à la volée tous les plugins présents dans le dossier 'plugins/'.
+    """
+    from core.plugin_loader import plugin_loader_engine
+    loaded = plugin_loader_engine.discover_and_load()
+
+    for name, manifest in loaded.items():
+        TOOL_REGISTRY[name] = manifest.function
+        if not any(s.get("name") == name for s in TOOL_SCHEMAS):
+            TOOL_SCHEMAS.append({
+                "name": manifest.name,
+                "description": manifest.description,
+                "parameters": manifest.parameters
+            })
+
+    return plugin_loader_engine.get_status()
+
+
 # Registre des outils disponibles pour l'Agent
 TOOL_REGISTRY: Dict[str, Callable[..., Any]] = {
     "execute_command": execute_command,
@@ -394,7 +421,9 @@ TOOL_REGISTRY: Dict[str, Callable[..., Any]] = {
     "njabot_deployer": njabot_deployer,
     "review_code": review_code,
     "list_scheduled_tasks": list_scheduled_tasks,
-    "trigger_scheduler_task": trigger_scheduler_task
+    "trigger_scheduler_task": trigger_scheduler_task,
+    "list_loaded_plugins": list_loaded_plugins,
+    "reload_plugins": reload_plugins
 }
 
 # Documentation structurée des outils injectée au LLM
@@ -478,8 +507,33 @@ TOOL_SCHEMAS = [
         "name": "trigger_scheduler_task",
         "description": "🚀 RUN SCHEDULER TASK : Déclenche l'exécution immédiate d'une tâche d'arrière-plan (ex: 'backup_database', 'check_nodes_health').",
         "parameters": {"task_name": "string"}
+    },
+    {
+        "name": "list_loaded_plugins",
+        "description": "🔌 PLUGIN LOADER : Liste les plugins dynamiques chargés depuis le dossier 'plugins/'.",
+        "parameters": {}
+    },
+    {
+        "name": "reload_plugins",
+        "description": "🔄 RELOAD PLUGINS : Recharge à la volée tous les plugins présents dans le dossier 'plugins/'.",
+        "parameters": {}
     }
 ]
+
+# Auto-découverte et enregistrement dynamique des plugins au démarrage
+try:
+    from core.plugin_loader import plugin_loader_engine
+    _discovered_plugins = plugin_loader_engine.discover_and_load()
+    for _pname, _pmanifest in _discovered_plugins.items():
+        TOOL_REGISTRY[_pname] = _pmanifest.function
+        if not any(s.get("name") == _pname for s in TOOL_SCHEMAS):
+            TOOL_SCHEMAS.append({
+                "name": _pmanifest.name,
+                "description": _pmanifest.description,
+                "parameters": _pmanifest.parameters
+            })
+except Exception as _e:
+    pass
 
 
 if __name__ == "__main__":

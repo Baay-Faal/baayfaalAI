@@ -128,6 +128,11 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
             self._send_json({"success": True, "scheduler": scheduler_engine.get_status()})
             return
 
+        if self.path == "/api/plugins/status":
+            from core.plugin_loader import plugin_loader_engine
+            self._send_json({"success": True, "plugins": plugin_loader_engine.get_status()})
+            return
+
         if self.path == "/api/learn/status" or self.path.startswith("/api/learn"):
             mem = BaayMemory()
             learn_data = mem.get_learning_status()
