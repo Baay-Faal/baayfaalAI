@@ -32,8 +32,8 @@ class BaayMemory:
     Tente la connexion vers MySQL XAMPP si disponible, sinon se rabat de façon transparente sur SQLite.
     """
 
-    def __init__(self, db_path: Path = SQLITE_DB_PATH, mysql_config: Optional[Dict[str, Any]] = None):
-        self.db_path = db_path
+    def __init__(self, db_path: Optional[Path] = None, mysql_config: Optional[Dict[str, Any]] = None):
+        self.db_path = db_path if db_path is not None else SQLITE_DB_PATH
         self.mysql_config = mysql_config or MYSQL_CONFIG
         self.engine_type = "sqlite"  # 'mysql' ou 'sqlite'
         self.mysql_conn = None

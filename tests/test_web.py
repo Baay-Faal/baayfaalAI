@@ -13,6 +13,15 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+import core.memory
+TEST_WEB_DB = Path(__file__).parent.parent / "data" / "test_web_memory.db"
+if TEST_WEB_DB.exists():
+    try:
+        TEST_WEB_DB.unlink()
+    except Exception:
+        pass
+core.memory.SQLITE_DB_PATH = TEST_WEB_DB
+
 from web.server import BaayWebHandler, PORT, run_server
 from http.server import HTTPServer
 import threading
@@ -21,6 +30,8 @@ import threading
 class TestWebCommandCenter(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.test_db = TEST_WEB_DB
+
         cls.test_port = 8089
         cls.server_address = ("", cls.test_port)
         cls.httpd = HTTPServer(cls.server_address, BaayWebHandler)
@@ -32,6 +43,11 @@ class TestWebCommandCenter(unittest.TestCase):
     def tearDownClass(cls):
         cls.httpd.shutdown()
         cls.httpd.server_close()
+        if hasattr(cls, 'test_db') and cls.test_db.exists():
+            try:
+                cls.test_db.unlink()
+            except Exception:
+                pass
 
     def test_01_index_html_static_serving(self):
         url = f"http://127.0.0.1:{self.test_port}/"
@@ -66,7 +82,7 @@ class TestWebCommandCenter(unittest.TestCase):
 
     def test_05_api_learn_verify_code_execution(self):
         from core.memory import BaayMemory
-        mem = BaayMemory()
+        mem = BaayMemory(db_path=self.test_db)
         mem.update_learning_progress("python", 1, 0, "UNLOCKED")
 
         url = f"http://127.0.0.1:{self.test_port}/api/learn/verify"

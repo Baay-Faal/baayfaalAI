@@ -18,7 +18,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from core.agent import BaayAgent
 from core.curriculum import PYTHON_CURRICULUM, get_lesson_by_index
-from core.memory import BaayMemory
+from core.memory import BaayMemory, SQLITE_DB_PATH
 from core.tools import system_info
 from voice.speaker import BaaySpeaker
 
@@ -81,6 +81,10 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
             return
 
         if self.path.startswith("/api/learn/lesson"):
+            from urllib.parse import parse_qs, urlparse
+            parsed = urlparse(self.path)
+            query = parse_qs(parsed.query)
+
             mem = BaayMemory()
             current = mem.get_learning_status()
             python_level = 1
@@ -88,9 +92,35 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
                 if t["tech"] == "python":
                     python_level = t.get("level", 1)
                     break
-            lesson_idx = max(0, python_level - 1)
-            lesson_data = get_lesson_by_index(lesson_idx)
-            self._send_json({"success": True, "lesson": lesson_data})
+
+            max_unlocked_idx = max(0, python_level - 1)
+
+            if "index" in query:
+                try:
+                    requested_idx = int(query["index"][0])
+                except Exception:
+                    requested_idx = max_unlocked_idx
+            else:
+                requested_idx = max_unlocked_idx
+
+            lesson_data = get_lesson_by_index(requested_idx)
+
+            all_lessons = [
+                {
+                    "index": i,
+                    "id": l["id"],
+                    "title": l["title"],
+                    "exercise_title": l["exercise_title"],
+                    "unlocked": i <= max_unlocked_idx
+                } for i, l in enumerate(PYTHON_CURRICULUM)
+            ]
+
+            self._send_json({
+                "success": True,
+                "lesson": lesson_data,
+                "current_unlocked_index": max_unlocked_idx,
+                "all_lessons": all_lessons
+            })
             return
 
         if self.path == "/api/learn/status" or self.path.startswith("/api/learn"):
