@@ -2,6 +2,37 @@
    BAAY-FAAL COMMAND CENTER FRONTEND JS (Vanilla Native)
    ========================================================================== */
 
+// Intercepteur global avec injection de clé d'API & gestion 401
+const originalFetch = window.fetch;
+window.fetch = async function (url, options = {}) {
+  options.headers = options.headers || {};
+  const savedKey = localStorage.getItem('baay_api_key');
+  if (savedKey) {
+    if (options.headers instanceof Headers) {
+      options.headers.set('X-API-Key', savedKey);
+    } else {
+      options.headers['X-API-Key'] = savedKey;
+    }
+  }
+
+  const response = await originalFetch(url, options);
+
+  if (response.status === 401 && typeof url === 'string' && url.startsWith('/api/') && !url.includes('/api/auth/status')) {
+    const key = prompt('[BAAY-FAAL SÉCURITÉ] Accès restreint. Veuillez saisir la clé d\'API Web :');
+    if (key) {
+      localStorage.setItem('baay_api_key', key);
+      if (options.headers instanceof Headers) {
+        options.headers.set('X-API-Key', key);
+      } else {
+        options.headers['X-API-Key'] = key;
+      }
+      return originalFetch(url, options);
+    }
+  }
+
+  return response;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // Navigation Tabs
   const navItems = document.querySelectorAll('.nav-item');

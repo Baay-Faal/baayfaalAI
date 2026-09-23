@@ -10,7 +10,7 @@ import os
 import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 # Ajout du dossier racine au sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -20,7 +20,7 @@ from core.agent import BaayAgent
 from core.curriculum import PYTHON_CURRICULUM, get_lesson_by_index
 from core.memory import BaayMemory, SQLITE_DB_PATH
 from core.tools import system_info
-from voice.speaker import BaaySpeaker
+from core.security import verify_api_key, get_security_config, save_security_config
 
 STATIC_DIR = PROJECT_ROOT / "web" / "static"
 PORT = 8000
@@ -28,20 +28,66 @@ PORT = 8000
 
 class BaayWebHandler(SimpleHTTPRequestHandler):
     """
-    Gestionnaire de requêtes HTTP et API REST pour l'Agent Baay-Faal.
+    Gestionnaire de requêtes HTTP et API REST pour l'Agent Baay-Faal avec sécurisation d'accès.
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
 
-    def _send_json(self, data: Dict[str, Any], status_code: int = 200):
+    def _send_json(self, data: Dict[str, Any], status_code: int = 200, cookie: Optional[str] = None):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Authorization")
+        if cookie:
+            self.send_header("Set-Cookie", cookie)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _verify_request_auth(self) -> bool:
+        from urllib.parse import parse_qs, urlparse
+        config = get_security_config()
+        if not config.get("auth_enabled", False):
+            return True
+
+        # 1. Header X-API-Key
+        api_key = self.headers.get("X-API-Key")
+        if api_key and verify_api_key(api_key):
+            return True
+
+        # 2. Header Authorization: Bearer <key>
+        auth_header = self.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            token = auth_header[7:].strip()
+            if verify_api_key(token):
+                return True
+
+        # 3. Cookie baay_api_key=<key>
+        cookie_str = self.headers.get("Cookie", "")
+        if "baay_api_key=" in cookie_str:
+            for item in cookie_str.split(";"):
+                item = item.strip()
+                if item.startswith("baay_api_key="):
+                    key = item.split("=", 1)[1]
+                    if verify_api_key(key):
+                        return True
+
+        # 4. Query param api_key=<key>
+        parsed = urlparse(self.path)
+        query_key = parse_qs(parsed.query).get("api_key", [None])[0]
+        if query_key and verify_api_key(query_key):
+            return True
+
+        return False
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Authorization")
+        self.end_headers()
 
     def do_GET(self):
         """
@@ -50,6 +96,24 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
         if self.path == "/" or self.path == "/index.html":
             self.path = "/index.html"
             return super().do_GET()
+
+        # Endpoint d'état d'authentification (public)
+        if self.path == "/api/auth/status":
+            cfg = get_security_config()
+            self._send_json({
+                "success": True,
+                "auth_enabled": cfg.get("auth_enabled", False)
+            })
+            return
+
+        # Contrôle de sécurité pour tous les endpoints API
+        if self.path.startswith("/api/") and not self._verify_request_auth():
+            self._send_json({
+                "success": False,
+                "error": "Accès refusé. Clé d'API manquante ou invalide.",
+                "auth_required": True
+            }, status_code=401)
+            return
 
         if self.path == "/api/status":
             mem = BaayMemory()
@@ -151,6 +215,49 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
         """
         Traitement des requêtes POST API.
         """
+        # Endpoint de connexion API (public)
+        if self.path == "/api/auth/login":
+            content_length = int(self.headers.get("Content-Length", 0))
+            raw_body = self.rfile.read(content_length).decode("utf-8")
+            try:
+                payload = json.loads(raw_body)
+                provided_key = payload.get("api_key", "").strip()
+
+                if verify_api_key(provided_key):
+                    cookie_val = f"baay_api_key={provided_key}; Path=/; SameSite=Lax"
+                    self._send_json({"success": True, "message": "Authentification réussie."}, cookie=cookie_val)
+                else:
+                    self._send_json({"success": False, "error": "Clé d'API incorrecte."}, status_code=401)
+            except Exception as e:
+                self._send_json({"success": False, "error": f"Format de requête invalide : {e}"}, status_code=400)
+            return
+
+        # Contrôle de sécurité pour toutes les autres requêtes POST API
+        if self.path.startswith("/api/") and not self._verify_request_auth():
+            self._send_json({
+                "success": False,
+                "error": "Accès refusé. Clé d'API manquante ou invalide.",
+                "auth_required": True
+            }, status_code=401)
+            return
+
+        if self.path == "/api/auth/config":
+            content_length = int(self.headers.get("Content-Length", 0))
+            raw_body = self.rfile.read(content_length).decode("utf-8")
+            try:
+                payload = json.loads(raw_body)
+                auth_enabled = payload.get("auth_enabled", False)
+                new_key = payload.get("api_key", "")
+
+                ok = save_security_config(auth_enabled, new_key)
+                if ok:
+                    self._send_json({"success": True, "auth_enabled": auth_enabled, "message": "Configuration de sécurité mise à jour."})
+                else:
+                    self._send_json({"success": False, "error": "Impossible d'enregistrer la configuration."}, status_code=500)
+            except Exception as e:
+                self._send_json({"success": False, "error": f"Erreur : {e}"}, status_code=400)
+            return
+
         if self.path == "/api/run":
             content_length = int(self.headers.get("Content-Length", 0))
             raw_body = self.rfile.read(content_length).decode("utf-8")
