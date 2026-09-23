@@ -234,7 +234,7 @@ for attr in dir(user_submission):
                 self._send_json({"success": False, "error": f"Erreur de vérification de code : {str(e)}"}, status_code=500)
             return
 
-        if parsed_path.path == "/api/learn/review":
+        if self.path == "/api/learn/review":
             try:
                 content_len = int(self.headers.get('Content-Length', 0))
                 body = self.rfile.read(content_len).decode('utf-8')
