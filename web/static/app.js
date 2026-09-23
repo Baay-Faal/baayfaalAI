@@ -235,21 +235,123 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Verify Code Submission
+  const btnReviewCode = document.getElementById('btn-review-code');
+
+  function renderCodeReviewCard(review) {
+    if (!review) return '';
+    const score = review.score !== undefined ? review.score : 0;
+    let scoreColor = '#10b981';
+    let scoreBg = 'rgba(16, 185, 129, 0.15)';
+    if (score < 5.0) {
+      scoreColor = '#ef4444';
+      scoreBg = 'rgba(239, 68, 68, 0.15)';
+    } else if (score < 8.0) {
+      scoreColor = '#f59e0b';
+      scoreBg = 'rgba(245, 158, 11, 0.15)';
+    }
+
+    let pep8Html = '';
+    if (review.pep8_issues && review.pep8_issues.length > 0) {
+      pep8Html = `<div style="margin-top: 6px; color: var(--accent-amber);">
+        <strong>Formotage & Conventions PEP 8 :</strong>
+        <ul style="margin: 4px 0 0 16px; padding: 0;">
+          ${review.pep8_issues.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
+        </ul>
+      </div>`;
+    }
+
+    let secHtml = '';
+    if (review.security_issues && review.security_issues.length > 0) {
+      secHtml = `<div style="margin-top: 6px; color: #ef4444;">
+        <strong>Sécurité / Failles :</strong>
+        <ul style="margin: 4px 0 0 16px; padding: 0;">
+          ${review.security_issues.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
+        </ul>
+      </div>`;
+    }
+
+    let recomHtml = '';
+    if (review.recommendations && review.recommendations.length > 0) {
+      recomHtml = `<div style="margin-top: 6px; color: var(--text-secondary);">
+        <strong>Conseils Tech Lead :</strong> ${review.recommendations.map(r => escapeHtml(r)).join(' ')}
+      </div>`;
+    }
+
+    return `
+      <div style="margin-top: 12px; padding: 12px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
+          <span style="font-weight: 700; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            REVUE DE CODE & NOTE D'INGÉNIEUR
+          </span>
+          <span style="font-size: 1rem; font-weight: 800; padding: 3px 12px; border-radius: 12px; background: ${scoreBg}; color: ${scoreColor}; border: 1px solid ${scoreColor};">
+            Note : ${score} / 10
+          </span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 6px;">
+          <div>⚡ <strong>Complexité :</strong> <code style="color: var(--accent-amber); font-weight: 700;">${escapeHtml(review.complexity || 'O(1)')}</code></div>
+          <div>📊 <strong>Métriques :</strong> ${review.metrics?.lines_count || 0} lignes, Profondeur boucles : ${review.metrics?.max_loop_depth || 0}</div>
+        </div>
+        ${pep8Html}
+        ${secHtml}
+        ${recomHtml}
+      </div>
+    `;
+  }
+
+  // Action dédiée : Seule la Revue de Code & Note /10
+  if (btnReviewCode) {
+    btnReviewCode.addEventListener('click', async () => {
+      const userCode = codeEditor.value.trim();
+      if (!userCode) return;
+
+      verifyResultBox.innerHTML = '<div style="color: var(--accent-cyan)">[ANALYSE STATIQUE] Exécution du Code Reviewer par l\'Agent Baay-Faal...</div>';
+
+      try {
+        const res = await fetch('/api/learn/review', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ language: 'python', code: userCode })
+        });
+        const data = await res.json();
+
+        if (data.success && data.review) {
+          verifyResultBox.innerHTML = renderCodeReviewCard(data.review);
+        } else {
+          verifyResultBox.innerHTML = `<div class="verify-error">Erreur de revue de code : ${escapeHtml(data.error || 'Erreur inconnue')}</div>`;
+        }
+      } catch (e) {
+        verifyResultBox.innerHTML = `<div class="verify-error">Erreur réseau : ${escapeHtml(e.message)}</div>`;
+      }
+    });
+  }
+
+  // Verify Code Submission + Auto Review Score
   if (btnVerifyCode) {
     btnVerifyCode.addEventListener('click', async () => {
       const userCode = codeEditor.value.trim();
       if (!userCode) return;
 
-      verifyResultBox.innerHTML = '<div style="color: var(--accent-indigo)">[VÉRIFICATION] Exécution du banc de tests natifs par l\'Agent Baay-Faal...</div>';
+      verifyResultBox.innerHTML = '<div style="color: var(--accent-indigo)">[VÉRIFICATION & REVIEW] Exécution du banc de tests et du Code Reviewer...</div>';
 
       try {
-        const res = await fetch('/api/learn/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tech: 'python', code: userCode })
-        });
-        const data = await res.json();
+        // Exécution simultanée des tests unitaires et du Code Reviewer
+        const [verifyRes, reviewRes] = await Promise.all([
+          fetch('/api/learn/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tech: 'python', code: userCode })
+          }),
+          fetch('/api/learn/review', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ language: 'python', code: userCode })
+          })
+        ]);
+
+        const data = await verifyRes.json();
+        const reviewData = await reviewRes.json();
+        const reviewCardHtml = reviewData.success ? renderCodeReviewCard(reviewData.review) : '';
 
         if (data.success) {
           let nextHtml = '';
@@ -269,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div style="margin-top: 8px; font-weight: 600;">Progression globale mise à jour : ${data.new_percent}%</div>
               ${nextHtml}
             </div>
+            ${reviewCardHtml}
           `;
           loadLearnStatus();
         } else {
@@ -279,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <pre>${escapeHtml(data.stderr || data.error || 'Erreur d\'exécution.')}</pre>
               ${hintHtml}
             </div>
+            ${reviewCardHtml}
           `;
         }
       } catch (e) {
