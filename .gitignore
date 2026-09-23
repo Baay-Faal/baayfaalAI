@@ -1,0 +1,16 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Databases & User Data
+data/*.db
+exercices/user_submission.py
+exercices/test_runner.py
+
+# Environment & Temp
+.venv/
+venv/
+scratch/
+.tempmediaStorage/
+*.log

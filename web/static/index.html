@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baay-Faal — Sovereign Engineering Command Center</title>
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Left Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">BAAY-FAAL</span>
+          <span class="brand-tag">SOVEREIGN CORE</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="tab-console">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+          <span>Command Center</span>
+        </button>
+
+        <button class="nav-item" data-tab="tab-nodes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+          <span>Network Nodes</span>
+        </button>
+
+        <button class="nav-item" data-tab="tab-memory">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          </svg>
+          <span>Memory Vault</span>
+        </button>
+
+        <button class="nav-item" data-tab="tab-learn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+          <span>Apprendre Tech</span>
+        </button>
+
+        <button class="nav-item" data-tab="tab-security">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Guardrails</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span class="status-label">ENGINE ONLINE</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-viewport">
+      <!-- Top Status Header Bar -->
+      <header class="top-header">
+        <div class="header-title">
+          <h1>Engineering Operating System</h1>
+          <p>Local Autonomous Reasoning Engine — ReAct Loop v2.5</p>
+        </div>
+
+        <div class="header-metrics">
+          <div class="metric-card">
+            <div class="metric-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="15" x2="23" y2="15"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="15" x2="4" y2="15"></line>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-title">MODEL</span>
+              <span class="metric-value">Qwen2.5-Coder</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-title">PERSISTENCE</span>
+              <span class="metric-value" id="val-memory-engine">Hybrid SQLite</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-title">NODES</span>
+              <span class="metric-value" id="val-nodes-count">1 Connected</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Tab: Console -->
+      <section id="tab-console" class="tab-page active">
+        <div class="workspace-grid">
+          <!-- Left Main Console Panel -->
+          <div class="console-panel">
+            <div class="input-card">
+              <div class="input-header">
+                <span class="input-label">COMMAND INSTRUCTION</span>
+                <label class="toggle-voice">
+                  <input type="checkbox" id="voice-toggle" checked>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                  </svg>
+                  <span>Voice Synthesis</span>
+                </label>
+              </div>
+
+              <div class="input-body">
+                <textarea id="cmd-input" placeholder="Exprimez votre ordre (ex: Inspecte l'état du système local et liste les répertoires)..." rows="3"></textarea>
+              </div>
+
+              <div class="input-actions">
+                <div class="action-hints">
+                  <code>Ctrl + Enter</code> to execute
+                </div>
+                <button id="btn-submit" class="btn-primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                  <span>Execute Plan</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Execution Logs -->
+            <div class="output-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="4 17 10 11 4 5"></polyline>
+                    <line x1="12" y1="19" x2="20" y2="19"></line>
+                  </svg>
+                  <span>ReAct Execution Stream</span>
+                </div>
+                <button id="btn-clear" class="btn-subtle">Clear Console</button>
+              </div>
+
+              <div class="card-body console-output" id="console-stream">
+                <div class="empty-state">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                  <p>Aucune instruction en cours. Saisissez une commande ci-dessus pour lancer la boucle autonome.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side System Inspector -->
+          <div class="inspector-panel">
+            <div class="panel-card">
+              <div class="card-header">
+                <span class="card-title">SYSTEM SPECIFICATIONS</span>
+              </div>
+              <div class="card-body specs-list">
+                <div class="spec-row">
+                  <span class="spec-key">Operating System</span>
+                  <span class="spec-val" id="spec-os">Windows</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Architecture</span>
+                  <span class="spec-val" id="spec-arch">x86_64</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Python Kernel</span>
+                  <span class="spec-val" id="spec-python">3.11 Vanilla</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key">Current Path</span>
+                  <span class="spec-val spec-path" id="spec-dir">C:\Users\moust\Baay_Faal</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="card-header">
+                <span class="card-title">ACTIVE TOOLSETS</span>
+              </div>
+              <div class="card-body tool-chips">
+                <span class="tool-chip">system_info</span>
+                <span class="tool-chip">execute_command</span>
+                <span class="tool-chip">read_file</span>
+                <span class="tool-chip">write_file</span>
+                <span class="tool-chip">list_directory</span>
+                <span class="tool-chip">remote_command</span>
+                <span class="tool-chip">recall_memory</span>
+                <span class="tool-chip">remember_fact</span>
+                <span class="tool-chip" style="border-color: var(--accent-indigo); color: var(--accent-indigo);">jef_jel_doctor</span>
+                <span class="tool-chip" style="border-color: var(--accent-indigo); color: var(--accent-indigo);">tak_jouk_generator</span>
+                <span class="tool-chip" style="border-color: var(--accent-indigo); color: var(--accent-indigo);">yite_cleaner</span>
+                <span class="tool-chip" style="border-color: var(--accent-indigo); color: var(--accent-indigo);">ndigel_scaffolder</span>
+                <span class="tool-chip" style="border-color: var(--accent-indigo); color: var(--accent-indigo);">njabot_deployer</span>
+              </div>
+            </div>
+
+            <!-- Quick Actions 5 Piliers BAAY-FAAL -->
+            <div class="panel-card" style="margin-top: 16px;">
+              <div class="card-header">
+                <span class="card-title">LES 5 PILIERS BAAY-FAAL</span>
+              </div>
+              <div class="card-body" style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-subtle btn-quick-pillar" data-cmd="Lance Jëf-Jël Doctor pour analyser les logs d'erreur" style="text-align: left; font-size: 0.85em; padding: 6px 10px;">
+                  🛠️ <strong>Jëf-Jël Doctor</strong> (Bug Diagnosis)
+                </button>
+                <button class="btn-subtle btn-quick-pillar" data-cmd="Exécute Tak-Jouk Generator pour générer un module natif PEP 8" style="text-align: left; font-size: 0.85em; padding: 6px 10px;">
+                  ⚡ <strong>Tak-Jouk Generator</strong> (Code Gen)
+                </button>
+                <button class="btn-subtle btn-quick-pillar" data-cmd="Lance Yité Cleaner pour nettoyer le cache pycache et vérifier le port 8000" style="text-align: left; font-size: 0.85em; padding: 6px 10px;">
+                  🧹 <strong>Yité Cleaner</strong> (Port & Cache)
+                </button>
+                <button class="btn-subtle btn-quick-pillar" data-cmd="Lance Ndigël Scaffolder pour générer l'architecture d'un nouveau projet selon la directive" style="text-align: left; font-size: 0.85em; padding: 6px 10px;">
+                  🧱 <strong>Ndigël Scaffolder</strong> (Architecture)
+                </button>
+                <button class="btn-subtle btn-quick-pillar" data-cmd="Lance Njabot Deployer pour vérifier l'état Git et l'orchestration distante" style="text-align: left; font-size: 0.85em; padding: 6px 10px;">
+                  🌐 <strong>Njabot Deployer</strong> (Git & Reseau)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View Tab: Network Nodes -->
+      <section id="tab-nodes" class="tab-page">
+        <div class="page-card">
+          <div class="card-header">
+            <span class="card-title">NETWORK NODE DIRECTORY (config/nodes.json)</span>
+          </div>
+          <div class="card-body">
+            <div class="nodes-table-wrapper">
+              <table class="nodes-table">
+                <thead>
+                  <tr>
+                    <th>NODE IDENTIFIER</th>
+                    <th>IP ADDRESS</th>
+                    <th>TCP PORT</th>
+                    <th>ROLE & SPECIFICATION</th>
+                    <th>SECURITY</th>
+                  </tr>
+                </thead>
+                <tbody id="nodes-table-body">
+                  <tr>
+                    <td>localhost</td>
+                    <td>127.0.0.1</td>
+                    <td>9999</td>
+                    <td>Machine Locale (Test / Loopback)</td>
+                    <td><span class="badge badge-success">HMAC-SHA256</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View Tab: Memory Vault -->
+      <section id="tab-memory" class="tab-page">
+        <div class="page-card">
+          <div class="card-header">
+            <span class="card-title">LONG-TERM KNOWLEDGE & ACTION LOGS</span>
+            <button id="btn-refresh-memory" class="btn-subtle">Refresh Memory</button>
+          </div>
+          <div class="card-body">
+            <div id="memory-list" class="memory-grid">
+              <!-- Content populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View Tab: Guardrails -->
+      <section id="tab-security" class="tab-page">
+        <div class="page-card">
+          <div class="card-header">
+            <span class="card-title">SECURITY GUARDRAILS & POLICIES</span>
+          </div>
+          <div class="card-body">
+            <div class="security-rules-grid">
+              <div class="rule-card rule-blocked">
+                <div class="rule-header">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                  </svg>
+                  <span>STRICTLY BLOCKED COMMANDS</span>
+                </div>
+                <p>Commandes destructrices automatiquement rejetées sans exécution :</p>
+                <ul>
+                  <code>rm -rf /</code> <code>format C:</code> <code>del /s /q</code> <code>DROP DATABASE</code> <code>shutdown</code> <code>reboot</code>
+                </ul>
+              </div>
+
+              <div class="rule-card rule-sensitive">
+                <div class="rule-header">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <span>HUMAN-IN-THE-LOOP SENSITIVE ACTIONS</span>
+                </div>
+                <p>Commandes nécessitant une validation explicite en console :</p>
+                <ul>
+                  <code>rm [file]</code> <code>del [file]</code> <code>systemctl stop</code> <code>kill -9</code> <code>git reset --hard</code>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View Tab: Apprendre Tech -->
+      <section id="tab-learn" class="tab-page">
+        <div class="learn-header">
+          <h2>ACADÉMIE DE FORGE — VERROUILLAGE MONOLANGAGE JËF JËL</h2>
+          <p>Progression séquentielle obligatoire : Validez Python à 100% avant d'ouvrir la technologie suivante.</p>
+        </div>
+
+        <!-- Tech Cards Grid -->
+        <div class="tech-cards-grid">
+          <!-- Python Card (Unlocked) -->
+          <div class="tech-card active-card" id="card-python">
+            <div class="tech-badge badge-unlocked">UNLOCKED</div>
+            <div class="tech-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <h3>Python (Vanilla First)</h3>
+            <p>Fondations, POO, Sockets, Rest API & Moteur IA ReAct.</p>
+            <div class="progress-bar-wrapper">
+              <div class="progress-info">
+                <span>Progression Parcours</span>
+                <span id="python-progress-text">20% (Niveau 1/5)</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="python-progress-fill" style="width: 20%;"></div>
+              </div>
+            </div>
+            <button class="btn-primary btn-full" id="btn-start-python">
+              <span>Lancer le Défi Python</span>
+            </button>
+          </div>
+
+          <!-- Linux Card (Locked) -->
+          <div class="tech-card locked-card" id="card-linux">
+            <div class="tech-badge badge-locked">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              LOCKED
+            </div>
+            <div class="tech-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="4" ry="4"></rect>
+                <line x1="6" y1="18" x2="10" y2="14"></line>
+                <line x1="6" y1="14" x2="10" y2="18"></line>
+              </svg>
+            </div>
+            <h3>Linux & Administration Système</h3>
+            <p>Bash Terminal, Noyau, Systemd, Permissions, SSH & Réseau.</p>
+            <div class="lock-reason">Requis : Valider Python à 100%</div>
+          </div>
+
+          <!-- Fullstack Card (Locked) -->
+          <div class="tech-card locked-card" id="card-fullstack">
+            <div class="tech-badge badge-locked">LOCKED</div>
+            <div class="tech-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+              </svg>
+            </div>
+            <h3>Fullstack Web & TypeScript</h3>
+            <p>APIs REST, DOM Native, ES6+, TypeScript Strict & Async.</p>
+            <div class="lock-reason">Requis : Valider Linux à 100%</div>
+          </div>
+
+          <!-- C++ Card (Locked) -->
+          <div class="tech-card locked-card" id="card-cpp">
+            <div class="tech-badge badge-locked">LOCKED</div>
+            <div class="tech-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <h3>C / C++ (Engine High Speed)</h3>
+            <p>Pointeurs, Gestion Mémoire, RAII (Moteurs Llama.cpp / Whisper).</p>
+            <div class="lock-reason">Requis : Valider Fullstack à 100%</div>
+          </div>
+        </div>
+
+        <!-- Étape 1 : Encadré Cours Flash & Théorie (Masqué par défaut jusqu'au clic sur Lancer le Défi) -->
+        <div id="course-card-box" class="page-card" style="display: none; margin-bottom: 24px; border: 1px solid var(--accent-indigo);">
+          <div class="card-header" style="background: rgba(99, 102, 241, 0.1);">
+            <span class="card-title" id="course-module-badge" style="color: var(--accent-indigo);">MODULE 1 : FONDATIONS & ALGORITHMIQUE</span>
+          </div>
+          <div class="card-body">
+            <div id="course-html-content">
+              <!-- Dynamically populated flash course theory -->
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+              <button class="btn-primary" id="btn-pass-to-code" style="padding: 10px 20px; font-size: 0.95em;">
+                <span>🚀 Passer au Code (Exercice 1/3)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Étape 2 : Sujet de l'Exercice & Éditeur de Code Vierge -->
+        <div class="editor-workspace" id="editor-workspace-box" style="display: none;">
+          <div class="editor-header">
+            <div class="editor-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              <span id="exercise-subject-title">ÉDITEUR DE CODE INTÉGRÉ — SOUMISSION EN DIRECT</span>
+            </div>
+            <button class="btn-primary" id="btn-verify-code">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Vérifier mon Code</span>
+            </button>
+          </div>
+
+          <div class="editor-body">
+            <div id="exercise-objective-box" style="margin-bottom: 12px; padding: 12px; background: var(--bg-card); border-left: 3px solid var(--accent-cyan); font-weight: 500; font-size: 0.9em; color: var(--text-primary);">
+              <!-- Exercise assignment objective -->
+            </div>
+            <textarea id="code-editor" rows="12" spellcheck="false" placeholder="# Écrivez votre code Python ci-dessous..."></textarea>
+          </div>
+
+          <div class="editor-footer">
+            <div id="verify-result-box" class="verify-result-container">
+              <div style="color: var(--text-muted)">
+                Cliquez sur <strong>"Vérifier mon Code"</strong> pour exécuter la suite de tests et valider l'étape.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

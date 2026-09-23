@@ -1,0 +1,14 @@
+{
+  "localhost": {
+    "ip": "127.0.0.1",
+    "port": 9999,
+    "role": "Machine Locale (Test / Boucle)",
+    "secret_key": "baay_faal_secret_key_change_me"
+  },
+  "serveur_principal": {
+    "ip": "192.168.1.50",
+    "port": 9999,
+    "role": "Serveur Web & Base de Données",
+    "secret_key": "baay_faal_secret_key_change_me"
+  }
+}

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  baay-agent:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: baay_agent_container
+    restart: always
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ../data:/app/data
+      - ../config:/app/config
+    ports:
+      - "9999:9999"
