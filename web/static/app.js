@@ -364,12 +364,12 @@ document.addEventListener('DOMContentLoaded', () => {
       verifyResultBox.innerHTML = '<div style="color: var(--accent-indigo)">[VÉRIFICATION & REVIEW] Exécution du banc de tests et du Code Reviewer...</div>';
 
       try {
-        // Exécution simultanée des tests unitaires et du Code Reviewer
+        const lessonIdx = currentLessonData ? ((currentLessonData.exercise_number - 1) + (currentLessonData.module_number - 1) * 3) : 0;
         const [verifyRes, reviewRes] = await Promise.all([
           fetch('/api/learn/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tech: 'python', code: userCode })
+            body: JSON.stringify({ tech: 'python', code: userCode, index: lessonIdx })
           }),
           fetch('/api/learn/review', {
             method: 'POST',

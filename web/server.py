@@ -178,6 +178,7 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
                 payload = json.loads(raw_body)
                 tech = payload.get("tech", "python")
                 user_code = payload.get("code", "")
+                submitted_index = payload.get("index", None)
 
                 if tech != "python":
                     self._send_json({
@@ -195,8 +196,17 @@ class BaayWebHandler(SimpleHTTPRequestHandler):
                         python_level = t.get("level", 1)
                         break
 
-                current_idx = max(0, python_level - 1)
-                lesson = get_lesson_by_index(current_idx)
+                max_unlocked_idx = max(0, python_level - 1)
+
+                if submitted_index is not None:
+                    try:
+                        target_idx = int(submitted_index)
+                    except Exception:
+                        target_idx = max_unlocked_idx
+                else:
+                    target_idx = max_unlocked_idx
+
+                lesson = get_lesson_by_index(target_idx)
 
                 # Sauvegarde du code soumis et création du runner d'isolation
                 exo_dir = PROJECT_ROOT / "exercices"
@@ -234,12 +244,14 @@ for attr in dir(user_submission):
                 )
 
                 is_success = (res.returncode == 0)
-                new_percent = lesson.get("percent", 0)
-                next_lesson = lesson
+                total_lessons = len(PYTHON_CURRICULUM)
+                current_percent = min(100, int(((python_level - 1) / total_lessons) * 100))
+                new_percent = current_percent
+                next_lesson = get_lesson_by_index(max_unlocked_idx)
 
-                if is_success:
-                    next_idx = current_idx + 1
-                    total_lessons = len(PYTHON_CURRICULUM)
+                # Mise à jour de la progression uniquement si l'exercice validé est le dernier déverrouillé
+                if is_success and target_idx >= max_unlocked_idx:
+                    next_idx = target_idx + 1
                     new_percent = min(100, int((next_idx / total_lessons) * 100))
                     new_level = next_idx + 1
                     new_status = "COMPLETED" if new_percent >= 100 else "UNLOCKED"
