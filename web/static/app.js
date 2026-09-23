@@ -95,6 +95,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Support Indentation Tab (4 espaces) dans les zones de texte
+  function enableTabIndentation(textarea) {
+    if (!textarea) return;
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const val = textarea.value;
+        textarea.value = val.substring(0, start) + "    " + val.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + 4;
+      }
+    });
+  }
+
+  if (codeEditor) enableTabIndentation(codeEditor);
+  if (cmdInput) enableTabIndentation(cmdInput);
+
   if (btnStartPython) {
     btnStartPython.addEventListener('click', loadActiveLesson);
   }
