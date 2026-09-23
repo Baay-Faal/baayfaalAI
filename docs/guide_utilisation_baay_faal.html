@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Guide d'Utilisation Officiel — Agent IA Baay-Faal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0f172a;
+      background-color: #ffffff;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      font-size: 12px;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #0284c7 0%, #0f172a 100%);
+      color: #ffffff;
+      padding: 22px 28px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-bottom: 4px solid #38bdf8;
+    }
+
+    .header-banner h1 {
+      margin: 0 0 4px 0;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #f8fafc;
+    }
+
+    .header-banner p {
+      margin: 0;
+      font-size: 12px;
+      color: #bae6fd;
+      font-weight: 400;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    h2 {
+      color: #0f172a;
+      font-size: 15px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    h3 {
+      color: #0284c7;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    .step-card {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #0284c7;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .step-card h4 {
+      margin: 0 0 4px 0;
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .step-card p {
+      margin: 0;
+      font-size: 11px;
+      color: #475569;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 11px;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .code-block {
+      background-color: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', monospace;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      line-height: 1.4;
+      margin: 8px 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .key-tag {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    ul, ol {
+      margin: 6px 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin-bottom: 3px;
+    }
+
+    .footer {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 10px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-banner">
+    <div class="badge">Guide Pratique d'Utilisation</div>
+    <h1>COMMENT UTILISER L'AGENT IA BAAY-FAAL</h1>
+    <p>Manuel complet d'installation, pilotage web, création de plugins et administration réseau</p>
+  </div>
+
+  <h2>1. Prise en Main & Lancement Rapide</h2>
+
+  <div class="step-card">
+    <h4>Étape A : Démarrer le Serveur Web Command Center</h4>
+    <p>Ouvrez un terminal dans le dossier du projet et exécutez la commande suivante :</p>
+    <div class="code-block">python web/server.py</div>
+    <p>L'agent démarre immédiatement le serveur HTTP natif et le planificateur Cron d'arrière-plan. Accédez à l'interface via votre navigateur à l'adresse : <span class="key-tag">http://localhost:8000</span></p>
+  </div>
+
+  <div class="step-card">
+    <h4>Étape B : Lancer les Tests automatisés (Validation)</h4>
+    <p>Pour vérifier que les 46 modules unitaires sont 100% opérationnels :</p>
+    <div class="code-block">python -m unittest discover tests</div>
+  </div>
+
+  <h2>2. Navigation dans l'Interface Web (Command Center)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Onglet / Vue</th>
+        <th>Description & Fonctionnalités</th>
+        <th>Comment l'utiliser</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>🤖 Command Center</strong></td>
+        <td>Chat interactif avec l'Agent ReAct, exécution de scripts et commande vocale.</td>
+        <td>Saisissez votre ordre en français/anglais. Cochez "Synthèse Vocale" pour entendre la réponse.</td>
+      </tr>
+      <tr>
+        <td><strong>🎓 Apprendre Tech</strong></td>
+        <td>Académie de forge Python (Curriculum 12 leçons).</td>
+        <td>Lisez le Cours Flash (Théorie), passez à l'éditeur de code, puis cliquez sur "Vérifier mon Code".</td>
+      </tr>
+      <tr>
+        <td><strong>💾 Mémoire</strong></td>
+        <td>Visualiseur de la base de données SQLite native.</td>
+        <td>Consultez les logs de session, votre progression et les données d'apprentissage enregistrées.</td>
+      </tr>
+      <tr>
+        <td><strong>⏱️ Planificateur</strong></td>
+        <td>Monitoring du Cron natif d'arrière-plan.</td>
+        <td>Visualisez l'historique des sauvegardes de la base de données et déclenchez des tâches manuelles.</td>
+      </tr>
+      <tr>
+        <td><strong>🔌 Plugins</strong></td>
+        <td>Gestionnaire des modules d'extension dynamiques.</td>
+        <td>Visualisez la liste des plugins chargés et cliquez sur "Recharger Plugins" pour rafraîchir à chaud.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3. Comment Ajouter un Plugin Personnalisé</h2>
+  <p>Le système de plugins vous permet de donner à l'agent de **nouvelles compétences** sans jamais modifier le code source principal.</p>
+
+  <ol>
+    <li>Créez un nouveau fichier Python dans le dossier <span class="key-tag">plugins/</span> (ex. <code>plugins/mon_outil.py</code>).</li>
+    <li>Définissez la fonction Python et son dictionnaire obligatoire <span class="key-tag">PLUGIN_MANIFEST</span> :</li>
+  </ol>
+
+  <div class="code-block"># Fichier : plugins/mon_outil.py
+
+def calculer_surface(largeur: float, longueur: float) -> dict:
+    return {"success": True, "surface": largeur * longueur}
+
+PLUGIN_MANIFEST = {
+    "name": "calculer_surface",
+    "description": "Calcule la surface d'une pièce en mètres carrés.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "largeur": {"type": "number", "description": "Largeur en mètres"},
+            "longueur": {"type": "number", "description": "Longueur en mètres"}
+        },
+        "required": ["largeur", "longueur"]
+    },
+    "function": calculer_surface
+}</div>
+
+  <p>Cliquez sur <strong>"Recharger Plugins"</strong> dans l'interface ou dites à l'agent : <em>"Recharge les plugins"</em>. L'outil est immédiatement actif !</p>
+
+  <h2>4. Pilotage de Machines Distantes (Réseau de Nœuds)</h2>
+  <p>L'agent Baay-Faal peut commander d'autres ordinateurs sur votre réseau local ou VPN de manière sécurisée via HMAC-SHA256.</p>
+
+  <div class="step-card">
+    <h4>Sur la machine distante à piloter :</h4>
+    <p>Lancez le démon réseau natif avec un port et un secret partagé :</p>
+    <div class="code-block">python network/node_daemon.py --port 9999 --secret ma_cle_secrete_hmac</div>
+  </div>
+
+  <div class="step-card">
+    <h4>Dans la configuration de l'Agent principal (config/nodes.json) :</h4>
+    <p>Ajoutez le nœud distant avec son adresse IP et son secret :</p>
+    <div class="code-block">[
+  {
+    "node_id": "serveur_local_01",
+    "host": "192.168.1.50",
+    "port": 9999,
+    "secret": "ma_cle_secrete_hmac"
+  }
+]</div>
+  </div>
+
+  <h2>5. Sécurisation & Déploiement à Distance</h2>
+  <ul>
+    <li><strong>Activer la Clé d'API Web :</strong> Définissez la variable d'environnement <span class="key-tag">BAAY_WEB_API_KEY="votre_cle"</span> avant de démarrer <code>server.py</code>. L'accès web sera immédiatement protégé par mot de passe.</li>
+    <li><strong>Déploiement Distant Gratuit :**</strong> Utilisez <strong>Cloudflare Tunnel</strong> ou <strong>Tailscale</strong> pour accéder à votre agent depuis votre smartphone ou PC portable partout dans le monde en HTTPS sécurisé.</li>
+  </ul>
+
+  <h2>6. Régénérer les Documents PDF</h2>
+  <p>Pour mettre à jour ou régénérer cette documentation PDF à tout moment :</p>
+  <div class="code-block">python tools/export_pdf.py</div>
+
+  <div class="footer">
+    Manuel Officiel d'Utilisation — Baay-Faal AI — Souveraineté Technologique & Philosophie Jëf Jël.
+  </div>
+
+</body>
+</html>
