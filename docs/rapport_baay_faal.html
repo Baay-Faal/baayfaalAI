@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rapport Complet & Mode d'Emploi — BAAY-FAAL AI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0f172a;
+      background-color: #ffffff;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      padding: 24px 30px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-bottom: 4px solid #38bdf8;
+    }
+
+    .header-banner h1 {
+      margin: 0 0 6px 0;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #f8fafc;
+    }
+
+    .header-banner p {
+      margin: 0;
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    h3 {
+      color: #1e293b;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .status-ok {
+      color: #16a34a;
+      font-weight: 700;
+    }
+
+    .code-block {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: 'Fira Code', monospace;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.5;
+      margin: 12px 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .info-box {
+      background-color: #f0f9ff;
+      border-left: 4px solid #0284c7;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 14px 0;
+      font-size: 12px;
+      color: #0369a1;
+    }
+
+    ul, ol {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 11px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-banner">
+    <div class="badge">Sovereign Engineering Operating System</div>
+    <h1>BAAY-FAAL AI — RAPPORT COMPLET & MODE D'EMPLOI</h1>
+    <p>Agent IA d'Ingénierie Autonome, Local & Souverain — Philosophie "Jëf Jël"</p>
+  </div>
+
+  <h2>📊 1. Fiche Technique & État du Système</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Métrique / Composant</th>
+        <th>Statut / Valeur</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Philosophie</strong></td>
+        <td><strong>Jëf Jël / Vanilla First</strong></td>
+        <td>100% Standard Library Python (Zéro package externe).</td>
+      </tr>
+      <tr>
+        <td><strong>Banc de Tests Unitaires</strong></td>
+        <td><span class="status-ok">46 / 46 Verts (100 %)</span></td>
+        <td>Couverture complète via <code>unittest</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Moteur de Mémoire</strong></td>
+        <td><strong>SQLite Natif (data/memory.db)</strong></td>
+        <td>Logs, suivi de progression du curriculum et rétention locale.</td>
+      </tr>
+      <tr>
+        <td><strong>Sécurité Web API</strong></td>
+        <td><span class="status-ok">Active (core/security.py)</span></td>
+        <td>Authentification à temps constant (<code>secrets.compare_digest</code>).</td>
+      </tr>
+      <tr>
+        <td><strong>Système de Plugins</strong></td>
+        <td><strong>Modulaire (plugins/)</strong></td>
+        <td>Hot-reloading à chaud sans redémarrage.</td>
+      </tr>
+      <tr>
+        <td><strong>Planificateur Tâches</strong></td>
+        <td><strong>Cron Natif non-bloquant</strong></td>
+        <td>Backups automatiques de BD, health checks & nettoyage.</td>
+      </tr>
+      <tr>
+        <td><strong>Réseau Multi-Nœuds</strong></td>
+        <td><strong>Démon TCP + HMAC-SHA256</strong></td>
+        <td>Pilotage sécurisé de machines distantes.</td>
+      </tr>
+      <tr>
+        <td><strong>Verrouillage Langage</strong></td>
+        <td><strong>Python (Niveau 4 / 25 %)</strong></td>
+        <td>Validation obligatoire de Python avant Linux.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🧱 2. Architecture des 6 Piliers Fondamentaux</h2>
+  <ul>
+    <li><strong>1. Cœur Agent & Registre d'Outils (<code>core/agent.py</code>, <code>core/tools.py</code>) :</strong> Moteur de raisonnement ReAct local, exécution sécurisée des commandes système et fichiers.</li>
+    <li><strong>2. Mémoire Persistent Souveraine (<code>core/memory.py</code>) :**</strong> BD SQLite native conservant toute la progression sans fuite vers des tiers.</li>
+    <li><strong>3. Planificateur Cron Autonome (<code>core/scheduler.py</code>) :**</strong> Thread d'arrière-plan exécutant la sauvegarde périodique de la BD vers <code>data/backups/</code> et les tests de santé réseau.</li>
+    <li><strong>4. Chargeur de Plugins Modulaire (<code>core/plugin_loader.py</code>) :**</strong> Scanne le dossier <code>plugins/</code> et enregistre dynamiquement les nouvelles compétences.</li>
+    <li><strong>5. Module de Sécurité Web API (<code>core/security.py</code>) :**</strong> Protection contre les attaques par canal auxiliaire (timing attacks) et validation des requêtes HTTP REST.</li>
+    <li><strong>6. Démon Réseau Multi-Nœuds (<code>network/node_daemon.py</code>) :**</strong> Serveur TCP léger authentifié par HMAC-SHA256 pour piloter des machines distantes.</li>
+  </ul>
+
+  <h2>🚀 3. Mode d'Emploi Pas-à-Pas</h2>
+
+  <h3>1. Démarrage de l'Agent Web & Command Center</h3>
+  <div class="code-block">python web/server.py</div>
+  <p>L'interface graphique est immédiatement disponible sur <strong>http://localhost:8000</strong>.</p>
+
+  <h3>2. Activation de la Sécurité Web par Clé d'API</h3>
+  <div class="code-block"># Windows PowerShell
+$env:BAAY_WEB_API_KEY="votre_cle_secrete_hyper_securisee"
+python web/server.py</div>
+
+  <h3>3. Configuration d'un Nœud Distant (Network Nodes)</h3>
+  <p>Sur la machine distante à piloter :</p>
+  <div class="code-block">python network/node_daemon.py --port 9999 --secret votre_cle_partagee</div>
+
+  <h3>4. Création d'un Plugin Personnalisé</h3>
+  <p>Déposez un fichier dans <code>plugins/mon_extension.py</code> exposant un dictionnaire <code>PLUGIN_MANIFEST</code>, puis cliquez sur <strong>"Recharger Plugins"</strong> dans l'interface.</p>
+
+  <h3>5. Exécution des Tests Unitaires de Validation</h3>
+  <div class="code-block">python -m unittest discover tests</div>
+
+  <div class="info-box">
+    <strong>Principe Jëf Jël :</strong> Le travail rigoureux et l'apprentissage par l'action sont la clé de la maîtrise. Tous les éléments de Baay-Faal AI sont conçus pour être 100% lisibles, autonomes et extensibles.
+  </div>
+
+  <div class="footer">
+    Document généré automatiquement par Baay-Faal AI — Tous droits réservés — Souveraineté & Ingénierie Native.
+  </div>
+
+</body>
+</html>
