@@ -49,21 +49,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const editorWorkspaceBox = document.getElementById('editor-workspace-box');
   const exerciseSubjectTitle = document.getElementById('exercise-subject-title');
   const exerciseObjectiveBox = document.getElementById('exercise-objective-box');
+  const lessonSelectDropdown = document.getElementById('lesson-select-dropdown');
 
   let currentLessonData = null;
 
-  // Étape 1 : Chargement et affichage du Cours Flash & Théorie
-  async function loadActiveLesson() {
+  // Étape 1 : Chargement et affichage du Cours Flash & Théorie (avec révision par index)
+  async function loadActiveLesson(requestedIndex = null) {
     try {
-      const res = await fetch('/api/learn/lesson?tech=python');
+      let url = '/api/learn/lesson?tech=python';
+      if (requestedIndex !== null) {
+        url += `&index=${requestedIndex}`;
+      }
+      const res = await fetch(url);
       const data = await res.json();
       if (data.success && data.lesson) {
         currentLessonData = data.lesson;
         displayFlashCourse(currentLessonData);
+
+        if (lessonSelectDropdown && data.all_lessons) {
+          lessonSelectDropdown.innerHTML = '';
+          data.all_lessons.forEach(l => {
+            const opt = document.createElement('option');
+            opt.value = l.index;
+            const statusTag = l.unlocked ? '[DÉBLOQUÉ]' : '[VERROUILLÉ]';
+            opt.textContent = `${statusTag} ${l.title || l.exercise_title}`;
+            opt.style.background = '#1e293b';
+            opt.style.color = l.unlocked ? '#f8fafc' : '#64748b';
+            opt.disabled = !l.unlocked;
+            if (l.index === (data.lesson.exercise_number - 1 + (data.lesson.module_number - 1)*3)) {
+              opt.selected = true;
+            }
+            lessonSelectDropdown.appendChild(opt);
+          });
+        }
       }
     } catch (e) {
       console.warn('Erreur de chargement de la leçon :', e);
     }
+  }
+
+  if (lessonSelectDropdown) {
+    lessonSelectDropdown.addEventListener('change', (e) => {
+      const selectedIdx = parseInt(e.target.value, 10);
+      loadActiveLesson(selectedIdx);
+    });
   }
 
   function displayFlashCourse(lesson) {

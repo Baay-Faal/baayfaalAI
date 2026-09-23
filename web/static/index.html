@@ -467,8 +467,14 @@
 
         <!-- Étape 1 : Encadré Cours Flash & Théorie (Masqué par défaut jusqu'au clic sur Lancer le Défi) -->
         <div id="course-card-box" class="page-card" style="display: none; margin-bottom: 24px; border: 1px solid var(--accent-indigo);">
-          <div class="card-header" style="background: rgba(99, 102, 241, 0.1);">
+          <div class="card-header" style="background: rgba(99, 102, 241, 0.1); display: flex; justify-content: space-between; align-items: center;">
             <span class="card-title" id="course-module-badge" style="color: var(--accent-indigo);">MODULE 1 : FONDATIONS & ALGORITHMIQUE</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="lesson-select-dropdown" style="font-size: 0.85em; color: var(--text-primary); font-weight: 600;">Navigation / Révision :</label>
+              <select id="lesson-select-dropdown" style="background: #1e293b; color: #f8fafc; border: 1px solid var(--accent-indigo); border-radius: 6px; padding: 6px 12px; font-size: 0.85em; font-weight: 600; cursor: pointer; max-width: 340px; text-overflow: ellipsis; outline: none;">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
           </div>
           <div class="card-body">
             <div id="course-html-content">
