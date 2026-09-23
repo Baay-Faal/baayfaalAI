@@ -190,7 +190,7 @@ class BaayAgent:
             self.memory.log_action(session_id, 1, "Génération Tak-Jouk Generator", "call_tool", "tak_jouk_generator", {"spec": goal}, res)
             return f"[TAK-JOUK GENERATOR]\n\nCode généré (PEP 8 Natif) :\n```python\n{res['code_generated']}\n```"
 
-        if "yité" in goal_lower or "yite" in goal_lower or "clean" in goal_lower or "nettoy" in goal_lower or "port" in goal_lower:
+        if any(w in goal_lower for w in ["yité", "yite", "clean", "nettoy", "port", "youtube", "l'idée", "ité", "unité"]):
             from core.tools import yite_cleaner
             res = yite_cleaner(port=8000)
             self.memory.log_action(session_id, 1, "Nettoyage Yité Cleaner", "call_tool", "yite_cleaner", {"port": 8000}, res)

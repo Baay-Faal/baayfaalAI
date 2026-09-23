@@ -134,8 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;
       }
+      // Correction phonétique automatique pour Yité Cleaner et termes Baay-Faal
+      let normalized = transcript;
+      if (/youtube|l'idée|ité|unité|yite/i.test(normalized)) {
+        normalized = normalized.replace(/youtube|l'idée|ité|unité|yite/gi, "Yité Cleaner");
+      }
       if (cmdInput) {
-        cmdInput.value = transcript;
+        cmdInput.value = normalized;
       }
     };
 
