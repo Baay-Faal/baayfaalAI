@@ -24,11 +24,11 @@ Voici la liste exacte des outils à ta disposition :
 6. "remote_command" : pour exécuter une commande à distance sur une machine du réseau (ex: 'localhost' ou 'serveur_principal'). args: {"node": "...", "command": "..."}
 7. "recall_memory" : pour chercher dans ta mémoire longue terme (faits appris ou actions passées). args: {"query": "..."}
 8. "remember_fact" : pour mémoriser un fait important (ex: adresse IP, mot de passe, préférence). args: {"key": "...", "value": "..."}
-9. "jef_jel_doctor" : 🛠️ JËF-JËL DOCTOR (Analyseur & Correcteur de Bugs). args: {"error_log": "..."}
-10. "tak_jouk_generator" : ⚡ TAK-JOUK GENERATOR (Générateur & Refactoriseur PEP 8). args: {"spec": "..."}
-11. "yite_cleaner" : 🧹 YITÉ CLEANER (Libérateur de Ports & Gestionnaire de Cache). args: {"port": 8000}
-12. "ndigel_scaffolder" : 🧱 NDIGËL SCAFFOLDER (Générateur d'Architecture selon Directive). args: {"project_name": "..."}
-13. "njabot_deployer" : 🌐 NJABOT DEPLOYER (Assistant Git & Déploiement Réseau). args: {"node": "...", "action": "..."}
+9. "jef_jel_doctor" : JËF-JËL DOCTOR (Analyseur & Correcteur de Bugs). args: {"error_log": "..."}
+10. "tak_jouk_generator" : TAK-JOUK GENERATOR (Générateur & Refactoriseur PEP 8). args: {"spec": "..."}
+11. "yite_cleaner" : YITÉ CLEANER (Libérateur de Ports & Gestionnaire de Cache). args: {"port": 8000}
+12. "ndigel_scaffolder" : NDIGËL SCAFFOLDER (Générateur d'Architecture selon Directive). args: {"project_name": "..."}
+13. "njabot_deployer" : NJABOT DEPLOYER (Assistant Git & Déploiement Réseau). args: {"node": "...", "action": "..."}
 
 RÈGLES D'OR DU FORMAT :
 Tu DOIS obligatoirement répondre UNIQUEMENT avec un objet JSON valide, sans aucun texte autour.
@@ -171,44 +171,44 @@ class BaayAgent:
             res = system_info()
             info_str = f"OS: {res['os']} ({res['os_version']})\nPython: {res['python_version']}\nArchitecture: {res['architecture']}\nRépertoire: {res['current_directory']}"
             self.memory.log_action(session_id, 1, "Inspection système native", "call_tool", "system_info", {}, info_str)
-            return f"⚙️ [MOTEUR SOUVERAIN NATIF]\n\n{info_str}\n\n💡 Conseil : Pour activer le raisonnement ReAct LLM avancé, lancez 'ollama serve' en arrière-plan."
+            return f"[MOTEUR SOUVERAIN NATIF]\n\n{info_str}\n\nConseil : Pour activer le raisonnement ReAct LLM avancé, lancez 'ollama serve' en arrière-plan."
 
         if "memoir" in goal_lower or "memory" in goal_lower or "cherche" in goal_lower:
             res = self.memory.search_memory(goal)
             self.memory.log_action(session_id, 1, "Recherche mémoire native", "call_tool", "recall_memory", {"query": goal}, res)
-            return f"🧠 [MÉMOIRE VAULT NATIF]\n\nFaits trouvés : {json.dumps(res.get('knowledge', []), ensure_ascii=False, indent=2)}"
+            return f"[MÉMOIRE VAULT NATIF]\n\nFaits trouvés : {json.dumps(res.get('knowledge', []), ensure_ascii=False, indent=2)}"
 
         if "doctor" in goal_lower or "jëf" in goal_lower or "jef" in goal_lower or "bug" in goal_lower or "crash" in goal_lower:
             from core.tools import jef_jel_doctor
             res = jef_jel_doctor(error_log=goal)
             self.memory.log_action(session_id, 1, "Analyse Jëf-Jël Doctor", "call_tool", "jef_jel_doctor", {"error_log": goal}, res)
-            return f"🛠️ [JËF-JËL DOCTOR]\n\nDiagnostic : {res['diagnosis']}\nRecommandation : {res['recommendation']}"
+            return f"[JËF-JËL DOCTOR]\n\nDiagnostic : {res['diagnosis']}\nRecommandation : {res['recommendation']}"
 
         if "tak" in goal_lower or "generator" in goal_lower or "generate" in goal_lower or "code" in goal_lower:
             from core.tools import tak_jouk_generator
             res = tak_jouk_generator(spec=goal)
             self.memory.log_action(session_id, 1, "Génération Tak-Jouk Generator", "call_tool", "tak_jouk_generator", {"spec": goal}, res)
-            return f"⚡ [TAK-JOUK GENERATOR]\n\nCode généré (PEP 8 Natif) :\n```python\n{res['code_generated']}\n```"
+            return f"[TAK-JOUK GENERATOR]\n\nCode généré (PEP 8 Natif) :\n```python\n{res['code_generated']}\n```"
 
         if "yité" in goal_lower or "yite" in goal_lower or "clean" in goal_lower or "nettoy" in goal_lower or "port" in goal_lower:
             from core.tools import yite_cleaner
             res = yite_cleaner(port=8000)
             self.memory.log_action(session_id, 1, "Nettoyage Yité Cleaner", "call_tool", "yite_cleaner", {"port": 8000}, res)
-            return f"🧹 [YITÉ CLEANER]\n\n{res['message']}\nCaches nettoyés : {len(res['pycache_found'])}"
+            return f"[YITÉ CLEANER]\n\n{res['message']}\nCaches nettoyés : {len(res['pycache_found'])}"
 
         if "ndigël" in goal_lower or "ndigel" in goal_lower or "scaffold" in goal_lower or "architecture" in goal_lower or "projet" in goal_lower:
             from core.tools import ndigel_scaffolder
             res = ndigel_scaffolder(project_name="mon_nouveau_projet")
             self.memory.log_action(session_id, 1, "Scaffolding Ndigël", "call_tool", "ndigel_scaffolder", {"project_name": "mon_nouveau_projet"}, res)
-            return f"🧱 [NDIGËL SCAFFOLDER]\n\n{res['message']}\nStructure :\n- " + "\n- ".join(res['structure_created'])
+            return f"[NDIGËL SCAFFOLDER]\n\n{res['message']}\nStructure :\n- " + "\n- ".join(res['structure_created'])
 
         if "njabot" in goal_lower or "deploy" in goal_lower or "git" in goal_lower or "reseau" in goal_lower:
             from core.tools import njabot_deployer
             res = njabot_deployer(node="localhost", action="status")
             self.memory.log_action(session_id, 1, "Déploiement Njabot", "call_tool", "njabot_deployer", {"node": "localhost"}, res)
-            return f"🌐 [NJABOT DEPLOYER]\n\n{res['message']}\nStatut Git :\n{res['git_status']}"
+            return f"[NJABOT DEPLOYER]\n\n{res['message']}\nStatut Git :\n{res['git_status']}"
 
         from core.tools import execute_command
         res = execute_command(goal)
         self.memory.log_action(session_id, 1, "Exécution de commande native", "call_tool", "execute_command", {"command": goal}, res)
-        return f"⚡ [EXÉCUTION NATIVE SOUVERAINE]\n\n{res.get('stdout') or res.get('stderr') or 'Commande exécutée.'}"
+        return f"[EXÉCUTION NATIVE SOUVERAINE]\n\n{res.get('stdout') or res.get('stderr') or 'Commande exécutée.'}"

@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (courseModuleBadge) courseModuleBadge.textContent = lesson.module_title || "MODULE 1";
     if (courseHtmlContent) courseHtmlContent.innerHTML = lesson.course_content || `<h3>${escapeHtml(lesson.title)}</h3><p>${escapeHtml(lesson.objective)}</p>`;
     if (btnPassToCode) {
-      btnPassToCode.innerHTML = `<span>🚀 Passer au Code (${escapeHtml(lesson.exercise_title || 'Exercice')})</span>`;
+      btnPassToCode.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg> <span>Passer au Code (${escapeHtml(lesson.exercise_title || 'Exercice')})</span>`;
     }
     if (courseCardBox) courseCardBox.style.display = 'block';
     if (editorWorkspaceBox) editorWorkspaceBox.style.display = 'none';
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!currentLessonData) return;
       if (exerciseSubjectTitle) exerciseSubjectTitle.textContent = currentLessonData.exercise_title || currentLessonData.title;
       if (exerciseObjectiveBox) {
-        exerciseObjectiveBox.innerHTML = `<strong>🎯 CAHIER DES CHARGES :</strong> ${escapeHtml(currentLessonData.objective)}`;
+        exerciseObjectiveBox.innerHTML = `<strong>CAHIER DES CHARGES :</strong> ${escapeHtml(currentLessonData.objective)}`;
       }
       if (codeEditor) codeEditor.value = currentLessonData.starter_code || "# Écrivez votre code Python ci-dessous :\n\n";
       if (editorWorkspaceBox) editorWorkspaceBox.style.display = 'block';
@@ -103,9 +103,94 @@ document.addEventListener('DOMContentLoaded', () => {
   const lockedCards = document.querySelectorAll('.locked-card');
   lockedCards.forEach(card => {
     card.addEventListener('click', () => {
-      alert("🔒 [RÈGLE D'ACIER JËF JËL]\n\nTant que le parcours Python n'est pas validé à 100% par le Boss de Fin de Parcours, il est STRICTEMENT INTERDIT de bifurquer sur d'autres technologies !");
+      alert("[RÈGLE D'ACIER JËF JËL]\n\nTant que le parcours Python n'est pas validé à 100% par le Boss de Fin de Parcours, il est STRICTEMENT INTERDIT de bifurquer sur d'autres technologies !");
     });
   });
+
+  // Module KADDOU (Commande Vocale par Micro Web Speech API)
+  const btnMicListen = document.getElementById('btn-mic-listen');
+  const micBtnLabel = document.getElementById('mic-btn-label');
+  let recognition = null;
+  let isListening = false;
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'fr-FR';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
+      isListening = true;
+      if (micBtnLabel) micBtnLabel.textContent = "Écoute en cours...";
+      if (btnMicListen) {
+        btnMicListen.style.borderColor = "var(--accent-rose)";
+        btnMicListen.style.color = "var(--accent-rose)";
+      }
+    };
+
+    recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      if (cmdInput) {
+        cmdInput.value = transcript;
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.warn("Erreur reconnaissance vocale :", event.error);
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        alert("Permission micro refusée. Veuillez cliquer sur l'icône de cadenas / microphone dans la barre d'adresse de votre navigateur pour autoriser le micro sur http://localhost:8000.");
+      } else if (event.error === 'no-speech') {
+        console.log("Aucune parole détectée.");
+      } else if (event.error !== 'aborted') {
+        alert("Erreur de reconnaissance vocale : " + event.error);
+      }
+      stopListening();
+    };
+
+    recognition.onend = () => {
+      stopListening();
+      if (cmdInput && cmdInput.value.trim().length > 0) {
+        submitInstruction();
+      }
+    };
+  } else {
+    console.warn("API Web Speech non disponible sur ce navigateur.");
+  }
+
+  function stopListening() {
+    isListening = false;
+    if (micBtnLabel) micBtnLabel.textContent = "Commande Vocale (Kaddou)";
+    if (btnMicListen) {
+      btnMicListen.style.borderColor = "var(--accent-cyan)";
+      btnMicListen.style.color = "var(--accent-cyan)";
+    }
+  }
+
+  if (btnMicListen) {
+    btnMicListen.addEventListener('click', async () => {
+      if (!SpeechRecognition || !recognition) {
+        alert("Reconnaissance vocale non disponible sur ce navigateur. Veuillez utiliser Google Chrome ou Microsoft Edge.");
+        return;
+      }
+      if (isListening) {
+        recognition.stop();
+      } else {
+        try {
+          if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+          }
+          recognition.start();
+        } catch (err) {
+          console.warn("Accès au microphone refusé ou indisponible :", err);
+          alert("Accès au microphone refusé. Autorisez le micro dans la barre d'adresse de votre navigateur.");
+        }
+      }
+    });
+  }
 
   // Load Learn Status
   async function loadLearnStatus() {
@@ -148,14 +233,14 @@ document.addEventListener('DOMContentLoaded', () => {
           if (data.next_lesson) {
             currentLessonData = data.next_lesson;
             nextHtml = `<div style="margin-top: 10px; padding: 10px; background: rgba(99, 102, 241, 0.15); border-radius: 4px;">
-              <strong>📚 [NOUVELLE ÉTAPE DÉVERROUILLÉE] : ${escapeHtml(data.next_lesson.exercise_title || data.next_lesson.title)}</strong><br>
+              <strong>[NOUVELLE ÉTAPE DÉVERROUILLÉE] : ${escapeHtml(data.next_lesson.exercise_title || data.next_lesson.title)}</strong><br>
               <em>Le cours de la prochaine étape est prêt ci-dessus !</em>
             </div>`;
             displayFlashCourse(currentLessonData);
           }
           verifyResultBox.innerHTML = `
             <div class="verify-success">
-              <strong>🎉 [TESTS PASSÉS AU VERT — ACCORD DU MENTOR]</strong><br>
+              <strong>[TESTS PASSÉS AU VERT — ACCORD DU MENTOR]</strong><br>
               Sortie du programme :<br>
               <pre>${escapeHtml(data.stdout || 'Programme exécuté avec succès.')}</pre>
               <div style="margin-top: 8px; font-weight: 600;">Progression globale mise à jour : ${data.new_percent}%</div>
@@ -164,10 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
           loadLearnStatus();
         } else {
-          let hintHtml = data.hint ? `<div style="margin-top: 8px; color: var(--accent-amber);">💡 <strong>Indice du Mentor :</strong> ${escapeHtml(data.hint)}</div>` : '';
+          let hintHtml = data.hint ? `<div style="margin-top: 8px; color: var(--accent-amber);"><strong>Indice du Mentor :</strong> ${escapeHtml(data.hint)}</div>` : '';
           verifyResultBox.innerHTML = `
             <div class="verify-error">
-              <strong>❌ [BANC DE TESTS ÉCHOUÉ — CODE REVIEW]</strong><br>
+              <strong>[BANC DE TESTS ÉCHOUÉ — CODE REVIEW]</strong><br>
               <pre>${escapeHtml(data.stderr || data.error || 'Erreur d\'exécution.')}</pre>
               ${hintHtml}
             </div>
