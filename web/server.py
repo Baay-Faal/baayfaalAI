@@ -19,8 +19,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from core.agent import BaayAgent
 from core.curriculum import PYTHON_CURRICULUM, get_lesson_by_index
 from core.memory import BaayMemory, SQLITE_DB_PATH
-from core.tools import system_info
 from core.security import verify_api_key, get_security_config, save_security_config
+from core.tools import system_info
+from voice.speaker import BaaySpeaker
 
 STATIC_DIR = PROJECT_ROOT / "web" / "static"
 PORT = 8000
